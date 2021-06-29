@@ -11,5 +11,6 @@ qemu-system-x86_64 -smp 2 -m 2048 \
   -drive file=alpine.qcow2,if=virtio \
   -netdev user,id=n1,hostfwd=tcp::2222-:22 \
   -device virtio-net,netdev=n1 \
+  -cdrom alpine-virt-3.14.0-x86_64.iso -boot d \
   -nographic
 

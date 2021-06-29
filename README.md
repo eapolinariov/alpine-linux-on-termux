@@ -51,7 +51,12 @@ wget https://dl-cdn.alpinelinux.org/alpine/v3.14/releases/x86_64/alpine-virt-3.1
 qemu-img create -f qcow2 alpine.qcow2 15G
 ```
 ```
-qemu-system-x86_64 -m 2048 -nic user -boot d -cdrom <VIRTUAL_ISO> -hda alpine.qcow2 -nographic
+qemu-system-x86_64 -smp 2 -m 2048 \
+  -drive file=alpine.qcow2,if=virtio \
+  -netdev user,id=n1,hostfwd=tcp::2222-:22 \
+  -device virtio-net,netdev=n1 \
+  -cdrom <VIRTUAL_ISO_NAME.iso> -boot d \
+  -nographic
 ```
 ```
 qemu-system-x86_64 -smp 2 -m 2048 \
