@@ -54,7 +54,12 @@ qemu-img create -f qcow2 alpine.qcow2 15G
 qemu-system-x86_64 -m 2048 -nic user -boot d -cdrom <VIRTUAL_ISO> -hda alpine.qcow2 -nographic
 ```
 ```
-qemu-system-x86_64 -m 2048 -nic user -boot d -cdrom alpine-virt-3.14.0-x86_64.iso -hda alpine.qcow2 -nographic
+qemu-system-x86_64 -smp 2 -m 2048 \
+  -drive file=alpine.qcow2,if=virtio \
+  -netdev user,id=n1,hostfwd=tcp::2222-:22 \
+  -device virtio-net,netdev=n1 \
+  -cdrom alpine-virt-3.14.0-x86_64.iso -boot d \
+  -nographic
 ```
 
 > * This install the **non-graphical version**, this means that we will only use the terminal
@@ -69,7 +74,13 @@ setup-alpine
 * #### Booting the Virtual Machine
 After the installation QEMU can be started from disk image ```(-boot c)``` without CDROM.
 ```
-qemu-system-x86_64 -m 2048 -nic user -hda alpine.qcow2 -nographic
+qemu-system-x86_64 -smp 2 -m 2048 \
+  -drive file=alpine.qcow2,if=virtio \
+  -netdev user,id=n1,hostfwd=tcp::2222-:22 \
+  -device virtio-net,netdev=n1 \
+  -nographic
 ```
 
 ## For more information about the commands seen here, visit https://wiki.alpinelinux.org/wiki/Qemu
+
+## Qemu commands based on https://youtu.be/RL96VSKzAQo
